@@ -2,6 +2,7 @@ class API::RestfulController < ActionController::Base
   snorlax_used_rest!
 
   include ::ProtectedFromForgery
+  API::Documentation::V1.document!
 
   def create_action
     @event = service.create({resource_symbol => resource, actor: current_user})
