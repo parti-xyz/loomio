@@ -28,7 +28,7 @@ class BaseMailer < ActionMailer::Base
     "\"#{user.name} (Loomio)\" <notifications@loomio.org>"
   end
 
-  def send_single_mail(locale: I18n.locale, to:, subject:, **options)
+  def send_single_mail(locale: , to:, subject:, **options)
     I18n.with_locale(locale) { mail options.merge(to: self.class.interceptor_email || to, subject: subject) }
   end
 

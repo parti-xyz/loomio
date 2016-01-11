@@ -112,7 +112,7 @@ class ThreadMailer < BaseMailer
                       from: from_user_via_loomio(@author),
                       reply_to: reply_to_address_with_group_name(discussion: @discussion, user: @recipient),
                       subject: thread_subject(alternative_subject),
-                      locale: locale_fallback(@recipient.locale, @author.locale)
+                      locale: @recipient.locale
   end
 
   def message_id_header

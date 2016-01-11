@@ -24,7 +24,11 @@ class InvitationService
       invitation = create_invite_to_join_group(recipient_email: recipient_email,
                                                group: group,
                                                inviter: inviter)
-      InvitePeopleMailer.delay.to_join_group(invitation, inviter, message)
+
+      InvitePeopleMailer.delay.to_join_group(invitation: invitaiton,
+                                             sender: inviter,
+                                             message_body: message,
+                                             locale: I18n.locale)
       invitation
     end
   end

@@ -22,7 +22,7 @@ class UserMailer < BaseMailer
       send_single_mail to: @user.email,
                        subject: t("email.missed_yesterday.subject"),
                        css: 'missed_yesterday',
-                       locale: locale_fallback(user.locale)
+                       locale: user.locale
     end
   end
 
@@ -33,7 +33,7 @@ class UserMailer < BaseMailer
     send_single_mail to: @user.email,
                      reply_to: @group.admin_email,
                      subject: "#{email_subject_prefix(@group.full_name)} " + t("email.group_membership_approved.subject"),
-                     locale: locale_fallback(user.locale, User.find_by_email(@group.admin_email).locale)
+                     locale: @user.locale
   end
 
   def added_to_group(user: nil, inviter: nil, group: nil, message: nil)

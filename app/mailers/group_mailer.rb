@@ -13,7 +13,7 @@ class GroupMailer < BaseMailer
     send_single_mail  to: admin.name_and_email,
                       reply_to: "#{@membership_request.name} <#{@membership_request.email}>",
                       subject: t("email.membership_request.subject", who: @membership_request.name, which_group: @group.full_name),
-                      locale: locale_fallback(admin.locale)
+                      locale: admin.locale
   end
 
   def group_email(group, sender, subject, message, recipient)
