@@ -26,9 +26,9 @@ class ThreadMailer < BaseMailer
     @comment = event.eventable
     @discussion = @comment.discussion
     @author = @comment.author
-    send_thread_email(alternative_subject: t('email.mentioned.subject',
-                                             who: @author.name,
-                                             which: @discussion.group.full_name))
+    send_thread_email(subject_key: 'email.mentioned.subject',
+                      subject_params: { who: @author.name,
+                                        which: @discussion.group.full_name } )
   end
 
   def comment_replied_to(recipient, event)
@@ -37,9 +37,9 @@ class ThreadMailer < BaseMailer
     @reply = event.eventable
     @discussion = @reply.discussion
     @author = @reply.author
-    send_thread_email(alternative_subject: t('email.comment_replied_to.subject',
-                                             who: @author.name,
-                                             which: @discussion.group.full_name))
+    send_thread_email(subject_key: 'email.comment_replied_to.subject',
+                      subject_params: { who: @author.name,
+                                        which: @discussion.group.full_name })
   end
 
   def new_vote(recipient, event)
@@ -59,8 +59,8 @@ class ThreadMailer < BaseMailer
     @discussion = @motion.discussion
     @author = @motion.author
     @group = @discussion.group
-    send_thread_email(alternative_subject: t(:"email.new_motion_created.subject",
-                                             proposal_title: @motion.title))
+    send_thread_email(subject_key: "email.new_motion_created.subject",
+                      subject_params: {proposal_title: @motion.title})
   end
 
   def motion_closing_soon(recipient, event)
@@ -70,8 +70,8 @@ class ThreadMailer < BaseMailer
     @author = @motion.author
     @discussion = @motion.discussion
     @group = @discussion.group
-    send_thread_email(alternative_subject:
-                      t(:"email.proposal_closing_soon.subject", proposal_title: @motion.title))
+    send_thread_email(subject_key: "email.proposal_closing_soon.subject",
+                      subject_params: {proposal_title: @motion.title})
   end
 
   def motion_outcome_created(recipient, event)
@@ -81,8 +81,8 @@ class ThreadMailer < BaseMailer
     @discussion = @motion.discussion
     @author = @motion.outcome_author
     @group = @motion.group
-    send_thread_email(alternative_subject:
-                      "#{t("email.proposal_outcome.subject")}: #{@motion.name}")
+    send_thread_email(subject_key: "email.proposal_outcome.subject",
+                      subject_params: {motion: @motion.name})
   end
 
   def motion_closed(recipient, event)
@@ -93,13 +93,13 @@ class ThreadMailer < BaseMailer
     @author = @motion.author
     @motion = @motion
     @group = @motion.group
-    send_thread_email(alternative_subject:
-                      t("email.proposal_closed.subject", which: @motion.name))
+    send_thread_email(subject_key: "email.proposal_closed.subject",
+                      subject_params: {which: @motion.name})
   end
 
   private
 
-  def send_thread_email(alternative_subject: nil)
+  def send_thread_email(subject_key: nil, subject_params: nil)
     @following = DiscussionReader.for(discussion: @discussion, user: @recipient).volume_is_loud?
     @utm_hash = utm_hash
 
@@ -111,7 +111,8 @@ class ThreadMailer < BaseMailer
     send_single_mail  to: @recipient.email,
                       from: from_user_via_loomio(@author),
                       reply_to: reply_to_address_with_group_name(discussion: @discussion, user: @recipient),
-                      subject: thread_subject(alternative_subject),
+                      subject_key: subject_key || 'email.custom_subject',
+                      subject_params: subject_params || {subject: "[#{@discussion.group.full_name}] #{@discussion.title}"},
                       locale: @recipient.locale
   end
 
@@ -121,14 +122,5 @@ class ThreadMailer < BaseMailer
 
   def message_id
     "<#{@discussion.id}@#{ENV['SMTP_DOMAIN']}>"
-  end
-
-  def thread_subject(alternative_subject)
-    @following = DiscussionReader.for(discussion: @discussion, user: @recipient).volume_is_loud?
-    if alternative_subject.nil? or @following
-      "[#{@discussion.group.full_name}] #{@discussion.title}"
-    else
-      alternative_subject
-    end
   end
 end
