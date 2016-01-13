@@ -30,7 +30,7 @@ class BaseMailer < ActionMailer::Base
 
   def send_single_mail(locale: , to:, subject_key:, subject_params: {}, **options)
     I18n.with_locale(locale) { mail options.merge(to: to,
-                                                  subject: I18N.t(subject_key, subject_params) }
+                                                  subject: I18n.t(subject_key, subject_params)) }
   end
 
   def self.send_bulk_mail(to:)

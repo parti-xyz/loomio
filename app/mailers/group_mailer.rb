@@ -13,7 +13,7 @@ class GroupMailer < BaseMailer
     send_single_mail  to: admin.name_and_email,
                       reply_to: "#{@membership_request.name} <#{@membership_request.email}>",
                       subject_key: "email.membership_request.subject",
-                      subject_params: {who: @membership_request.name, which_group: @group.full_name}
-                      locale: admin.locale
+                      subject_params: {who: @membership_request.name, which_group: @group.full_name},
+                      locale: locale_fallback(admin.locale)
   end
 end
