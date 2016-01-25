@@ -31,6 +31,9 @@ source ~/.bash_profile
 
 nodenv install 5.4.0 && nodenv global 5.4.0
 
+# 프로젝트 클론
+git clone https://github.com/parti-xyz/loomio.git ~/loomio
+
 # 데이터베이스 준비 postgres 9.4
 sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
 wget --quiet -O - https://postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -46,4 +49,4 @@ rake db:setup
 # js part, loomio
 npm -g i bower
 npm -g i lineman
-cd ~/loomio/lineman && npm
+cd ~/loomio/lineman && npm i && bower i
