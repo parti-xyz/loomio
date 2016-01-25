@@ -39,11 +39,11 @@ sudo -u postgres createuser -s ubuntu
 sudo -u postgres createdb ubuntu
 
 # ruby part, loomio
-cd /vagrant/loomio && bundle 
-cp /vagrant/loomio/config/database.example.yml /vagrant/loomio/config/database.yml
+cd ~/loomio && bundle 
+cp ~/loomio/config/database.example.yml ~/loomio/config/database.yml
 rake db:setup
 
 # js part, loomio
 npm -g i bower
 npm -g i lineman
-cd /vagrant/loomio/lineman && npm
+cd ~/loomio/lineman && npm
